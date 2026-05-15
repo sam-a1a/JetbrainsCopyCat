@@ -15,6 +15,7 @@ object CopyCatSettings {
     private const val KEY_SELECTED_LINES = "copycat.copySelectedLines"
     private const val KEY_LARGE_FILES    = "copycat.excludeLargeFiles"
     private const val KEY_THRESHOLD      = "copycat.largeFileThreshold"
+    private const val KEY_LINES_MENU     = "copycat.showLinesCounterInMenu"
 
     var includeFilePath: Boolean
         get() = PropertiesComponent.getInstance().getBoolean(KEY_PATH, false)
@@ -63,4 +64,8 @@ object CopyCatSettings {
     var largeFileThreshold: Int
         get() = PropertiesComponent.getInstance().getInt(KEY_THRESHOLD, 500)
         set(v) = PropertiesComponent.getInstance().setValue(KEY_THRESHOLD, v, 500)
+
+    var showLinesCounterInMenu: Boolean
+        get() = PropertiesComponent.getInstance().getBoolean(KEY_LINES_MENU, true)
+        set(v) = PropertiesComponent.getInstance().setValue(KEY_LINES_MENU, v)
 }

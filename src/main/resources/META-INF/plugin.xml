@@ -1,7 +1,7 @@
 <idea-plugin>
 <id>com.internal.copycat</id>
 <name>Copycat</name>
-    <vendor url="https://github.com/sam-a1a">SamA1A</vendor>
+<vendor url="https://github.com/sam-a1a">SamA1A</vendor>
 
 <description><![CDATA[
         Copies file or folder contents to clipboard with powerful formatting options.
@@ -25,6 +25,14 @@
             text="CopyCat">
         <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
     </action>
+
+    <group
+            id="CopyCat.LinesCounterGroup"
+            class="com.internal.copycat.CopyCatLinesCounterGroup"
+            text="CopyCat Lines Counter"
+            popup="true">
+        <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="CopyCat.CopyCatAction"/>
+    </group>
 </actions>
 
 </idea-plugin>
