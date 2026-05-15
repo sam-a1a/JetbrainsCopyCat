@@ -5,11 +5,12 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.guessProjectDir
 import com.intellij.openapi.util.IconLoader
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.ui.JBColor
+import com.intellij.util.ui.JBUI
 import java.awt.*
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import javax.swing.*
-import javax.swing.border.EmptyBorder
 
 class CopyCatLocPanel(private val project: Project) : JPanel(BorderLayout()) {
 
@@ -24,7 +25,7 @@ class CopyCatLocPanel(private val project: Project) : JPanel(BorderLayout()) {
         scanButton.addActionListener { runScan() }
         topBar.add(scanButton)
 
-        val scroll = JScrollPane(foldersPanel).apply {
+        val scroll = com.intellij.ui.components.JBScrollPane(foldersPanel).apply {
             border = null
             background = bg()
             viewport.background = bg()
@@ -32,7 +33,7 @@ class CopyCatLocPanel(private val project: Project) : JPanel(BorderLayout()) {
 
         val center = JPanel(BorderLayout()).apply {
             background = bg()
-            border = EmptyBorder(8, 12, 8, 12)
+            border = JBUI.Borders.empty(8, 12)
             add(statsPanel, BorderLayout.NORTH)
             add(scroll, BorderLayout.CENTER)
         }
@@ -76,7 +77,7 @@ class CopyCatLocPanel(private val project: Project) : JPanel(BorderLayout()) {
                 statsPanel.add(Box.createVerticalStrut(8))
 
                 foldersPanel.removeAll()
-                foldersPanel.border = EmptyBorder(0, 0, 12, 0)
+                foldersPanel.border = JBUI.Borders.emptyBottom(12)
                 for (fs in folderStatsList.sortedByDescending { it.totalLines }) {
                     foldersPanel.add(FolderChip(fs))
                     foldersPanel.add(Box.createVerticalStrut(4))
@@ -99,7 +100,7 @@ class CopyCatLocPanel(private val project: Project) : JPanel(BorderLayout()) {
         row.add(JLabel("$label:").apply { font = font.deriveFont(Font.BOLD) })
         row.add(JLabel(value))
         row.add(JLabel("($sub)").apply { foreground = UIManager.getColor("Label.disabledForeground") })
-        if (diff != null) row.add(JLabel(diff).apply { foreground = Color(0x4CAF50) })
+        if (diff != null) row.add(JLabel(diff).apply { foreground = JBColor(0x4CAF50, 0x4CAF50) })
         return row
     }
 
@@ -127,32 +128,32 @@ class CopyCatLocPanel(private val project: Project) : JPanel(BorderLayout()) {
             stripped = stripped.replace(Regex("<!--[\\s\\S]*?-->"), "")
             val noCommentLines = stripped.lines().count { it.isNotBlank() }
             FileStats(file, totalLines, noCommentLines, file.length)
-        } catch (e: Exception) { null }
+        } catch (_: Exception) { null }
     }
 }
 
 // Chip components
-class FolderChip(private val stats: FolderStats) : JPanel(BorderLayout()) {
+class FolderChip(stats: FolderStats) : JPanel(BorderLayout()) {
     private var expanded = false
     private val filesContainer = JPanel().apply {
         layout = BoxLayout(this, BoxLayout.Y_AXIS)
         background = bg()
-        border = EmptyBorder(6, 20, 4, 0)
+        border = JBUI.Borders.empty(6, 20, 4, 0)
         isVisible = false
     }
     private val upIcon   = tryIcon("/icons/up.svg")
     private val downIcon = tryIcon("/icons/down.svg")
     private val toggleBtn = JLabel(downIcon ?: JLabel("▶").let { return@let null }.also { } ).apply {
-        if (downIcon == null) { (this as JLabel).text = "▶" }
+        if (downIcon == null) { this.text = "▶" }
         cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
-        border = EmptyBorder(0, 8, 0, 0)
+        border = JBUI.Borders.emptyLeft(8)
     }
 
     init {
         background = bg()
         border = BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(UIManager.getColor("Separator.foreground") ?: Color.GRAY, 1, true),
-            EmptyBorder(6, 10, 6, 10)
+            BorderFactory.createLineBorder(UIManager.getColor("Separator.foreground") ?: JBColor.GRAY, 1, true),
+            JBUI.Borders.empty(6, 10)
         )
         alignmentX = LEFT_ALIGNMENT
         maximumSize = Dimension(Int.MAX_VALUE, Int.MAX_VALUE)
@@ -173,7 +174,7 @@ class FolderChip(private val stats: FolderStats) : JPanel(BorderLayout()) {
             filesContainer.add(Box.createVerticalStrut(3))
         }
 
-        val toggle = MouseAdapter@ object : MouseAdapter() {
+        val toggle = object : MouseAdapter() {
             override fun mouseClicked(e: MouseEvent) { toggle() }
         }
         header.addMouseListener(toggle)
@@ -189,14 +190,14 @@ class FolderChip(private val stats: FolderStats) : JPanel(BorderLayout()) {
         if (upIcon != null && downIcon != null) {
             toggleBtn.icon = if (expanded) upIcon else downIcon
         } else {
-            (toggleBtn as JLabel).text = if (expanded) "▼" else "▶"
+            toggleBtn.text = if (expanded) "▼" else "▶"
         }
         revalidate(); repaint()
         parent?.revalidate(); parent?.repaint()
     }
 }
 
-class FileChip(private val stats: FileStats) : JPanel(FlowLayout(FlowLayout.LEFT, 6, 2)) {
+class FileChip(stats: FileStats) : JPanel(FlowLayout(FlowLayout.LEFT, 6, 2)) {
     init {
         background = bg()
         alignmentX = LEFT_ALIGNMENT
@@ -209,7 +210,7 @@ class FileChip(private val stats: FileStats) : JPanel(FlowLayout(FlowLayout.LEFT
             foreground = UIManager.getColor("Label.disabledForeground")
         })
         add(separator())
-        add(JLabel(formatSize(stats.sizeBytes)).apply { foreground = Color(0x2D7DD2) })
+        add(JLabel(formatSize(stats.sizeBytes)).apply { foreground = JBColor(0x2D7DD2, 0x2D7DD2) })
     }
 }
 
@@ -218,9 +219,9 @@ class FileChip(private val stats: FileStats) : JPanel(FlowLayout(FlowLayout.LEFT
 data class FileStats(val file: VirtualFile, val totalLines: Int, val linesWithoutComments: Int, val sizeBytes: Long)
 data class FolderStats(val folder: VirtualFile, val allFiles: List<FileStats>, val totalLines: Int, val linesWithoutComments: Int, val sizeBytes: Long)
 
-// ── Helpers
+// Helpers
 
-private fun bg() = UIManager.getColor("Panel.background") ?: Color.WHITE
+private fun bg() = UIManager.getColor("Panel.background") ?: JBColor.WHITE
 
 private fun separator() = JSeparator(JSeparator.VERTICAL).apply { preferredSize = Dimension(1, 12) }
 
@@ -232,4 +233,4 @@ private fun formatSize(bytes: Long) = when {
 
 private fun tryIcon(path: String): Icon? = try {
     IconLoader.getIcon(path, FileChip::class.java)
-} catch (e: Exception) { null }
+} catch (_: Exception) { null }

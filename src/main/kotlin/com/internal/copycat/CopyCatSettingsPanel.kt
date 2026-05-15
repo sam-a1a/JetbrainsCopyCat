@@ -7,7 +7,6 @@ import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.net.URI
 import javax.swing.*
-import javax.swing.border.EmptyBorder
 
 class CopyCatSettingsPanel : JPanel() {
 
@@ -84,7 +83,7 @@ class CopyCatSettingsPanel : JPanel() {
             addActionListener { CopyCatSettings.excludeLargeFiles = isSelected }
         }
         val changeLabel = JLabel("Change").apply {
-            foreground = Color(0x2D7DD2)
+            foreground = JBColor(0x2D7DD2, 0x2D7DD2)
             cursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)
             border = JBUI.Borders.emptyLeft(8)
             addMouseListener(object : MouseAdapter() {
@@ -124,13 +123,13 @@ class CopyCatSettingsPanel : JPanel() {
         }
 
         val text = JLabel("Contributions, feature requests, and bug reports are welcome on the GitHub repo").apply {
-            foreground = Color(0x2D7DD2)
+            foreground = JBColor(0x2D7DD2, 0x2D7DD2)
             font = font.deriveFont(11f)
         }
 
         val iconLabel = try {
             JLabel(com.intellij.openapi.util.IconLoader.getIcon("/icons/out.svg", this::class.java))
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             JLabel("↗")
         }
 

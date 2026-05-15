@@ -110,8 +110,8 @@ class CopyCatAction : AnAction() {
                 formatted = copy.text
             }
             formatted
-        } catch (e: Exception) {
-            try { String(file.contentsToByteArray()) } catch (ex: Exception) { "" }
+        } catch (_: Exception) {
+            try { String(file.contentsToByteArray()) } catch (_: Exception) { "" }
         }
     }
 
