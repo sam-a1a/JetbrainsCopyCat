@@ -1,39 +1,30 @@
 <idea-plugin>
-    <id>com.internal.copycat</id>
-    <name>Copycat</name>
+<id>com.internal.copycat</id>
+<name>Copycat</name>
     <vendor url="https://github.com/sam-a1a">SamA1A</vendor>
 
-    <description><![CDATA[
-        Copies file or folder contents to clipboard with formatting options.
+<description><![CDATA[
+        Copies file or folder contents to clipboard with powerful formatting options.
     ]]></description>
 
-    <depends>com.intellij.modules.platform</depends>
+<depends>com.intellij.modules.platform</depends>
 
-    <extensions defaultExtensionNs="com.intellij">
-    </extensions>
+<extensions defaultExtensionNs="com.intellij">
+    <toolWindow
+            id="CopyCat"
+            secondary="false"
+            icon="/icons/icon.svg"
+            anchor="right"
+            factoryClass="com.internal.copycat.CopyCatToolWindowFactory"/>
+</extensions>
 
-    <actions>
-        <action
-                id="CopyCat.CopyCatAction"
-                class="com.internal.copycat.CopyCatAction"
-                text="CopyCat">
-            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
-        </action>
-
-        <group id="CopyCat.OptionsGroup" text="CopyCat Options" popup="true">
-            <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="CopyCat.CopyCatAction"/>
-            <action id="CopyCat.ToggleFilePath"         class="com.internal.copycat.ToggleIncludeFilePathAction"/>
-            <action id="CopyCat.ToggleFileName"         class="com.internal.copycat.ToggleIncludeFileNameAction"/>
-            <action id="CopyCat.ToggleNoComments"       class="com.internal.copycat.ToggleNoCommentsAction"/>
-            <action id="CopyCat.ToggleNoPackageImports" class="com.internal.copycat.ToggleNoPackageImportsAction"/>
-            <action id="CopyCat.ToggleMarkdown"         class="com.internal.copycat.ToggleCopyAsMarkdownAction"/>
-            <action id="CopyCat.TogglePlainText"        class="com.internal.copycat.ToggleCopyAsPlainTextAction"/>
-            <action id="CopyCat.ToggleLineCount"        class="com.internal.copycat.ToggleShowLineCountAction"/>
-            <action id="CopyCat.ToggleHidden"           class="com.internal.copycat.ToggleExcludeHiddenAction"/>
-            <action id="CopyCat.ToggleSelectedLines"    class="com.internal.copycat.ToggleCopySelectedLinesAction"/>
-            <action id="CopyCat.ToggleLargeFiles"       class="com.internal.copycat.ToggleExcludeLargeFilesAction"/>
-            <action id="CopyCat.ToggleExcludeTypes"     class="com.internal.copycat.ToggleExcludeFileTypesAction"/>
-        </group>
-    </actions>
+<actions>
+    <action
+            id="CopyCat.CopyCatAction"
+            class="com.internal.copycat.CopyCatAction"
+            text="CopyCat">
+        <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
+    </action>
+</actions>
 
 </idea-plugin>
