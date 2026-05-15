@@ -15,6 +15,13 @@ CopyCat is a JetBrains IDE plugin that adds a fast, configurable way to copy fil
 
 Compatible with all JetBrains IDEs: IntelliJ IDEA, RustRover, PyCharm, WebStorm, GoLand, Rider, CLion, DataGrip, and all others.
 
+<p align="center">
+  <a href="https://plugins.jetbrains.com/plugin/31777" style="display: inline-flex; align-items: center; gap: 4px; text-decoration: none;">
+    <img src="src/main/resources/icons/download.svg" alt="Install plugin" height="28"/>
+    <span style="vertical-align: middle;">Get Plugin</span>
+  </a>
+</p>
+
 ---
 
 ## Features
