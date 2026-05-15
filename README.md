@@ -92,7 +92,8 @@ Right-clicking a file or folder also shows a **CopyCat Lines Counter** submenu w
 ![Settings Panel](.github/assets/settings-panel.png)
 
 ### Lines of Code Analyzer
-![Lines of Code](.github/assets/lines-of-code.png)
+![Lines of Code](.github/assets/lines-of-code1.png)
+![Lines of Code](.github/assets/lines-of-code2.png)
 
 ### Right-Click Menu
 ![Right Click Menu](.github/assets/right-click-menu.png)
