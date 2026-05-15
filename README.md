@@ -9,7 +9,7 @@
 </p>
 
 <br/>
-<br/>>
+<br/>
 
 CopyCat is a JetBrains IDE plugin that adds a fast, configurable way to copy file and folder contents directly from the project file tree. It supports recursive folder copying, code formatting, and a built-in Lines of Code analyzer.
 

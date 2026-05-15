@@ -5,6 +5,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.project.guessProjectDir
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.wm.WindowManager
 import com.intellij.psi.PsiFile
@@ -85,8 +86,11 @@ class CopyCatAction : AnAction() {
         }
 
         val header = buildString {
-            if (CopyCatSettings.includeFilePath) appendLine("// ${file.path}")
-            else if (CopyCatSettings.includeFileName) appendLine("// ${file.name}")
+            when {
+                CopyCatSettings.includeFilePath     -> appendLine("// ${file.path}")
+                CopyCatSettings.includeRelativePath -> appendLine("// ${getRelativePath(file, project)}")
+                CopyCatSettings.includeFileName     -> appendLine("// ${file.name}")
+            }
         }
 
         val block = if (CopyCatSettings.copyAsMarkdown) {
@@ -163,5 +167,10 @@ class CopyCatAction : AnAction() {
 
     override fun update(e: AnActionEvent) {
         e.presentation.isEnabledAndVisible = true
+    }
+
+    private fun getRelativePath(file: VirtualFile, project: Project): String {
+        val projectDir = project.guessProjectDir() ?: return file.name
+        return com.intellij.openapi.vfs.VfsUtilCore.getRelativePath(file, projectDir) ?: file.name
     }
 }

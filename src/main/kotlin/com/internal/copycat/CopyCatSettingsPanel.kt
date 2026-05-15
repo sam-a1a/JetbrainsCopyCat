@@ -16,6 +16,7 @@ class CopyCatSettingsPanel : JPanel() {
         background = bg()
 
         addTitle("Copy Content")
+        addCheckbox("Include relative file path (e.g. // app/network/Ktor.kt)", { CopyCatSettings.includeRelativePath }, { CopyCatSettings.includeRelativePath = it })
         addCheckbox("Include file path",                            { CopyCatSettings.includeFilePath },            { CopyCatSettings.includeFilePath = it })
         addCheckbox("Include file name header",                     { CopyCatSettings.includeFileName },            { CopyCatSettings.includeFileName = it })
         addCheckbox("Copy as Markdown",                             { CopyCatSettings.copyAsMarkdown },             { CopyCatSettings.copyAsMarkdown = it })
