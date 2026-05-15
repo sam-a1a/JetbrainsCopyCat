@@ -1,4 +1,15 @@
-# CopyCat — JetBrains Plugin
+<p align="center">
+  <img src="src/main/resources/icons/icon.svg" width="80" height="80" alt="CopyCat Logo"/>
+</p>
+
+<h1 align="center">CopyCat — JetBrains Plugin</h1>
+
+<p align="center">
+  A fast, configurable plugin to copy file and folder contents from the project tree across all JetBrains IDEs.
+</p>
+
+<br/>
+<br/>>
 
 CopyCat is a JetBrains IDE plugin that adds a fast, configurable way to copy file and folder contents directly from the project file tree. It supports recursive folder copying, code formatting, and a built-in Lines of Code analyzer.
 
@@ -70,7 +81,14 @@ Right-clicking a file or folder also shows a **CopyCat Lines Counter** submenu w
 
 ## Screenshots
 
-<!-- Add your screenshots here -->
+### Settings Panel
+![Settings Panel](.github/assets/settings-panel.png)
+
+### Lines of Code Analyzer
+![Lines of Code](.github/assets/lines-of-code.png)
+
+### Right-Click Menu
+![Right Click Menu](.github/assets/right-click-menu.png)
 
 ---
 
