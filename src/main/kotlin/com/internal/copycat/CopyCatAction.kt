@@ -19,9 +19,7 @@ class CopyCatAction : AnAction() {
         val project = e.project ?: return
         val content = StringBuilder()
 
-        for (file in files) {
-            collectContent(file, project, content)
-        }
+        for (file in files) collectContent(file, project, content)
 
         Toolkit.getDefaultToolkit().systemClipboard
             .setContents(StringSelection(content.toString()), null)
@@ -29,11 +27,13 @@ class CopyCatAction : AnAction() {
 
     private fun collectContent(file: VirtualFile, project: Project, content: StringBuilder) {
         if (file.isDirectory) {
-            for (child in file.children) {
-                collectContent(child, project, content)
-            }
+            for (child in file.children) collectContent(child, project, content)
         } else {
-            content.append(getFormattedContent(file, project))
+            var text = getFormattedContent(file, project)
+            if (CopyCatSettings.doNotCopyComments) text = removeComments(text)
+            if (CopyCatSettings.doNotCopyPackageAndImports) text = removePackageAndImports(text)
+            if (CopyCatSettings.includeFilePath) text = "// ${file.path}\n$text"
+            content.append(text).append("\n")
         }
     }
 
@@ -41,19 +41,34 @@ class CopyCatAction : AnAction() {
         return try {
             val psiFile = PsiManager.getInstance(project).findFile(file)
                 ?: return String(file.contentsToByteArray())
-
             var formatted = psiFile.text
-
             WriteCommandAction.runWriteCommandAction(project) {
                 val copy = psiFile.copy() as PsiFile
                 CodeStyleManager.getInstance(project).reformat(copy)
                 formatted = copy.text
             }
-
             formatted
         } catch (e: Exception) {
             try { String(file.contentsToByteArray()) } catch (ex: Exception) { "" }
         }
+    }
+
+    private fun removeComments(text: String): String {
+        var r = text
+        r = r.replace(Regex("/\\*[\\s\\S]*?\\*/"), "")
+        r = r.replace(Regex("//[^\n]*"), "")
+        r = r.replace(Regex("(?m)^\\s*#[^\n]*"), "")
+        r = r.replace(Regex("<!--[\\s\\S]*?-->"), "")
+        r = r.replace(Regex("\n{3,}"), "\n\n")
+        return r
+    }
+
+    private fun removePackageAndImports(text: String): String {
+        return text.lines()
+            .filter { !it.trim().startsWith("package ") && !it.trim().startsWith("import ") }
+            .joinToString("\n")
+            .replace(Regex("\n{3,}"), "\n\n")
+            .trimStart()
     }
 
     override fun update(e: AnActionEvent) {

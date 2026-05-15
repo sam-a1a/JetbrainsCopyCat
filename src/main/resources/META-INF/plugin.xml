@@ -1,10 +1,10 @@
 <idea-plugin>
     <id>com.internal.copycat</id>
     <name>Copycat</name>
-    <vendor url="https://www.yourcompany.com">YourCompany</vendor>
+    <vendor url="https://github.com/sam-a1a">SamA1A</vendor>
 
     <description><![CDATA[
-        Copies file or folder contents to clipboard.
+        Copies file or folder contents to clipboard with formatting options.
     ]]></description>
 
     <depends>com.intellij.modules.platform</depends>
@@ -19,6 +19,13 @@
                 text="CopyCat">
             <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
         </action>
+
+        <group id="CopyCat.OptionsGroup" text="CopyCat Options" popup="true">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="CopyCat.CopyCatAction"/>
+            <action id="CopyCat.ToggleFilePath"       class="com.internal.copycat.ToggleIncludeFilePathAction"/>
+            <action id="CopyCat.ToggleNoComments"     class="com.internal.copycat.ToggleNoCommentsAction"/>
+            <action id="CopyCat.ToggleNoPackageImports" class="com.internal.copycat.ToggleNoPackageImportsAction"/>
+        </group>
     </actions>
 
 </idea-plugin>
