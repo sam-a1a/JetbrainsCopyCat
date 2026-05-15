@@ -1,9 +1,15 @@
 package com.internal.copycat
 
 import com.intellij.openapi.actionSystem.*
+import com.intellij.openapi.util.IconLoader
 import com.intellij.openapi.vfs.VirtualFile
+import javax.swing.Icon
 
 class CopyCatLinesCounterGroup : DefaultActionGroup("CopyCat Lines Counter", true) {
+
+    private val fileIcon:   Icon? = tryIcon("/icons/file.svg")
+    private val errorIcon:  Icon? = tryIcon("/icons/error.svg")
+    private val folderIcon: Icon? = tryIcon("/icons/icon.svg")
 
     override fun getChildren(e: AnActionEvent?): Array<AnAction> {
         e ?: return emptyArray()
@@ -26,18 +32,16 @@ class CopyCatLinesCounterGroup : DefaultActionGroup("CopyCat Lines Counter", tru
 
     override fun getActionUpdateThread() = ActionUpdateThread.BGT
 
-    // Stats
-
     private fun addFileStats(file: VirtualFile, list: MutableList<AnAction>) {
         try {
-            val content = String(file.contentsToByteArray())
+            val content    = String(file.contentsToByteArray())
             val total      = content.lines().size
             val noComments = stripComments(content).lines().count { it.isNotBlank() }
-            list.add(label("📄  ${file.name}"))
-            list.add(label("Lines: $total total   |   $noComments without comments   (−${total - noComments})"))
-            list.add(label("Size: ${formatSize(file.length)}"))
+            list.add(label(file.name,                                                      fileIcon))
+            list.add(label("Lines: $total total   |   $noComments without comments   (${total - noComments} in comments)", null))
+            list.add(label("Size: ${formatSize(file.length)}",                             null))
         } catch (e: Exception) {
-            list.add(label("⚠  Could not read ${file.name}"))
+            list.add(label("Could not read ${file.name}", errorIcon))
         }
     }
 
@@ -48,19 +52,17 @@ class CopyCatLinesCounterGroup : DefaultActionGroup("CopyCat Lines Counter", tru
         var total = 0; var noComments = 0; var bytes = 0L
         for (f in files) {
             try {
-                val c = String(f.contentsToByteArray())
+                val c   = String(f.contentsToByteArray())
                 total      += c.lines().size
                 noComments += stripComments(c).lines().count { it.isNotBlank() }
                 bytes      += f.length
             } catch (_: Exception) {}
         }
 
-        list.add(label("📁  ${folder.name}"))
-        list.add(label("Lines: $total total   |   $noComments without comments   (−${total - noComments})"))
-        list.add(label("Files: ${files.size}   |   Size: ${formatSize(bytes)}"))
+        list.add(label(folder.name,                                                               folderIcon))
+        list.add(label("Lines: $total total   |   $noComments without comments   (${total - noComments} in comments)", null))
+        list.add(label("Files: ${files.size}   |   Size: ${formatSize(bytes)}",                  null))
     }
-
-    // Helpers
 
     private fun collectFiles(dir: VirtualFile, result: MutableList<VirtualFile>) {
         for (child in dir.children) {
@@ -68,9 +70,12 @@ class CopyCatLinesCounterGroup : DefaultActionGroup("CopyCat Lines Counter", tru
         }
     }
 
-    private fun label(text: String) = object : AnAction(text) {
+    private fun label(text: String, icon: Icon?) = object : AnAction(text) {
         override fun actionPerformed(e: AnActionEvent) {}
-        override fun update(e: AnActionEvent) { e.presentation.isEnabled = false }
+        override fun update(e: AnActionEvent) {
+            e.presentation.isEnabled = false
+            icon?.let { e.presentation.icon = it }
+        }
         override fun getActionUpdateThread() = ActionUpdateThread.BGT
     }
 
@@ -88,4 +93,8 @@ class CopyCatLinesCounterGroup : DefaultActionGroup("CopyCat Lines Counter", tru
         bytes < 1024 * 1024 -> "${bytes / 1024} KB"
         else                -> String.format("%.1f MB", bytes / (1024.0 * 1024.0))
     }
+
+    private fun tryIcon(path: String): Icon? = try {
+        IconLoader.getIcon(path, this::class.java)
+    } catch (e: Exception) { null }
 }

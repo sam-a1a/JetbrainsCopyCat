@@ -1,117 +1,95 @@
-# Copycat
+# CopyCat — JetBrains Plugin
 
-[![Twitter Follow](https://img.shields.io/badge/follow-%40JBPlatform-1DA1F2?logo=twitter)](https://twitter.com/JBPlatform)
-[![Developers Forum](https://img.shields.io/badge/JetBrains%20Platform-Join-blue)][jb:forum]
+CopyCat is a JetBrains IDE plugin that adds a fast, configurable way to copy file and folder contents directly from the project file tree. It supports recursive folder copying, code formatting, and a built-in Lines of Code analyzer.
 
-## Plugin structure
+Compatible with all JetBrains IDEs: IntelliJ IDEA, RustRover, PyCharm, WebStorm, GoLand, Rider, CLion, DataGrip, and all others.
 
-A generated project contains the following content structure:
+---
 
-```
-.
-├── .run/                   Predefined Run/Debug Configurations
-├── build/                  Output build directory
-├── gradle
-│   ├── wrapper/            Gradle Wrapper
-│   ├── libs.versions.toml  Version catalog
-├── src                     Plugin sources
-│   ├── main
-│   │   ├── kotlin/         Kotlin production sources
-│   │   └── resources/      Resources - plugin.xml, icons, messages
-├── .gitignore              Git ignoring rules
-├── build.gradle.kts        Gradle build configuration
-├── gradle.properties       Gradle configuration properties
-├── gradlew                 *nix Gradle Wrapper script
-├── gradlew.bat             Windows Gradle Wrapper script
-├── README.md               README
-└── settings.gradle.kts     Gradle project settings
-```
+## Features
 
-In addition to the configuration files, the most crucial part is the `src` directory, which contains our implementation
-and the manifest for our plugin – [plugin.xml][file:plugin.xml].
+### Copy Content
+Right-click any file or folder in the project tree and select **CopyCat** to copy its contents to the clipboard. For folders, it recursively copies all files inside, including nested subdirectories.
 
-> [!NOTE]
-> To use Java in your plugin, create the `/src/main/java` directory.
+### Copy Options
+A dedicated settings panel (accessible via the CopyCat tool window in the sidebar) lets you configure how content is copied:
 
-## Plugin configuration file
+**Content**
+- Include the full file path as a header above each file
+- Include the file name as a header above each file
+- Copy content wrapped in Markdown code blocks with language detection
+- Copy only the lines currently selected in the editor
 
-The plugin configuration file is a [plugin.xml][file:plugin.xml] file located in the `src/main/resources/META-INF`
-directory.
-It provides general information about the plugin, its dependencies, extensions, and listeners.
+**Filters**
+- Strip all comments before copying
+- Strip package declarations and import statements
+- Copy as plain text (removes comments, blank lines, and imports)
+- Exclude non-code files such as `.json`, `.xml`, `.lock`, `.yml`, and others
+- Exclude hidden files and folders
+- Exclude files over a configurable line threshold (default: 500 lines)
 
-You can read more about this file in the [Plugin Configuration File][docs:plugin.xml] section of our documentation.
+**Display**
+- Show total line and character count in the status bar after each copy
 
-If you're still not quite sure what this is all about, read [Introduction to IntelliJ Platform][docs:intro].
+**Menu**
+- Toggle the CopyCat Lines Counter submenu on or off in the right-click menu
 
-## Predefined Run/Debug configurations
+### Lines of Code Analyzer
+The CopyCat tool window includes a Lines of Code tab. Click **Scan Project** to analyze the entire project and see:
 
-Within the default project structure, there is a `.run` directory provided containing predefined *Run/Debug
-configurations* that expose corresponding Gradle tasks:
+- Total lines of code and project size
+- Total lines excluding comments and the difference
+- Total lines across code-only files and the difference
+- A breakdown by folder, expandable to show individual files with line counts, comment-stripped counts, and file sizes
 
-| Configuration name | Description                                                                                                                                                                         |
-|--------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Run Plugin         | Runs [`:runIde`][gh:intellij-platform-gradle-plugin-runIde] IntelliJ Platform Gradle Plugin task. Use the *Debug* icon for plugin debugging.                                        |
-| Run Tests          | Runs [`:test`][gradle:lifecycle-tasks] Gradle task.                                                                                                                                 |
-| Run Verifications  | Runs [`:verifyPlugin`][gh:intellij-platform-gradle-plugin-verifyPlugin] IntelliJ Platform Gradle Plugin task to check the plugin compatibility against the specified IntelliJ IDEs. |
+### CopyCat Lines Counter (Right-Click Menu)
+Right-clicking a file or folder also shows a **CopyCat Lines Counter** submenu with an instant compact summary:
 
-> [!NOTE]
-> You can find the logs from the running task in the `idea.log` tab.
+- File or folder name
+- Total lines and lines without comments
+- File count (for folders) and size
 
-## Publishing the plugin
+---
 
-> [!TIP]
-> Make sure to follow all guidelines listed in [Publishing a Plugin][docs:publishing] to follow all recommended and
-> required steps.
+## Installation
 
-Releasing a plugin to [JetBrains Marketplace](https://plugins.jetbrains.com) is a straightforward operation that uses
-the `publishPlugin` Gradle task provided by
-the [intellij-platform-gradle-plugin][gh:intellij-platform-gradle-plugin-docs].
+### From JetBrains Marketplace
+1. Open your JetBrains IDE
+2. Go to **Settings → Plugins → Marketplace**
+3. Search for **CopyCat**
+4. Click **Install**
 
-You can also upload the plugin to the [JetBrains Plugin Repository](https://plugins.jetbrains.com/plugin/upload)
-manually via UI.
+### Manual Installation
+1. Download the latest `.zip` from the [Releases](https://github.com/sam-a1a/JetbrainsCopyCat/releases) page
+2. Open your JetBrains IDE
+3. Go to **Settings → Plugins → gear icon → Install Plugin from Disk**
+4. Select the downloaded `.zip` file
+5. Restart the IDE
 
-## Useful links
+---
 
-- [IntelliJ Platform SDK Plugin SDK][docs]
-- [IntelliJ Platform Gradle Plugin Documentation][gh:intellij-platform-gradle-plugin-docs]
-- [IntelliJ Platform Explorer][jb:ipe]
-- [JetBrains Marketplace Quality Guidelines][jb:quality-guidelines]
-- [IntelliJ Platform UI Guidelines][jb:ui-guidelines]
-- [JetBrains Marketplace Paid Plugins][jb:paid-plugins]
-- [IntelliJ SDK Code Samples][gh:code-samples]
+## Screenshots
 
-[docs]: https://plugins.jetbrains.com/docs/intellij
+<!-- Add your screenshots here -->
 
-[docs:intro]: https://plugins.jetbrains.com/docs/intellij/intellij-platform.html?from=IJPluginTemplate
+---
 
-[docs:plugin.xml]: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html?from=IJPluginTemplate
+## Usage
 
-[docs:publishing]: https://plugins.jetbrains.com/docs/intellij/publishing-plugin.html?from=IJPluginTemplate
+1. Open any project in a JetBrains IDE
+2. Right-click any file or folder in the **Project** panel
+3. Click **CopyCat** to copy the content to your clipboard
+4. To configure behavior, open the **CopyCat** panel from the right sidebar
+5. To view line statistics, open the **CopyCat** panel and go to the **Lines of Code** tab
 
-[file:plugin.xml]: ./src/main/resources/META-INF/plugin.xml
+---
 
-[gh:code-samples]: https://github.com/JetBrains/intellij-sdk-code-samples
+## Contributing
 
-[gh:intellij-platform-gradle-plugin]: https://github.com/JetBrains/intellij-platform-gradle-plugin
+Contributions, feature requests, and bug reports are welcome. Please open an issue or submit a pull request on this repository.
 
-[gh:intellij-platform-gradle-plugin-docs]: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin.html
+---
 
-[gh:intellij-platform-gradle-plugin-runIde]: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-tasks.html#runIde
+## License
 
-[gh:intellij-platform-gradle-plugin-verifyPlugin]: https://plugins.jetbrains.com/docs/intellij/tools-intellij-platform-gradle-plugin-tasks.html#verifyPlugin
-
-[gradle:lifecycle-tasks]: https://docs.gradle.org/current/userguide/java_plugin.html#lifecycle_tasks
-
-[jb:github]: https://github.com/JetBrains/.github/blob/main/profile/README.md
-
-[jb:forum]: https://platform.jetbrains.com/
-
-[jb:quality-guidelines]: https://plugins.jetbrains.com/docs/marketplace/quality-guidelines.html
-
-[jb:paid-plugins]: https://plugins.jetbrains.com/docs/marketplace/paid-plugins-marketplace.html
-
-[jb:quality-guidelines]: https://plugins.jetbrains.com/docs/marketplace/quality-guidelines.html
-
-[jb:ipe]: https://jb.gg/ipe
-
-[jb:ui-guidelines]: https://jetbrains.github.io/ui
+This project is licensed under the MIT License.
