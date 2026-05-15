@@ -22,9 +22,17 @@
 
         <group id="CopyCat.OptionsGroup" text="CopyCat Options" popup="true">
             <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="CopyCat.CopyCatAction"/>
-            <action id="CopyCat.ToggleFilePath"       class="com.internal.copycat.ToggleIncludeFilePathAction"/>
-            <action id="CopyCat.ToggleNoComments"     class="com.internal.copycat.ToggleNoCommentsAction"/>
+            <action id="CopyCat.ToggleFilePath"         class="com.internal.copycat.ToggleIncludeFilePathAction"/>
+            <action id="CopyCat.ToggleFileName"         class="com.internal.copycat.ToggleIncludeFileNameAction"/>
+            <action id="CopyCat.ToggleNoComments"       class="com.internal.copycat.ToggleNoCommentsAction"/>
             <action id="CopyCat.ToggleNoPackageImports" class="com.internal.copycat.ToggleNoPackageImportsAction"/>
+            <action id="CopyCat.ToggleMarkdown"         class="com.internal.copycat.ToggleCopyAsMarkdownAction"/>
+            <action id="CopyCat.TogglePlainText"        class="com.internal.copycat.ToggleCopyAsPlainTextAction"/>
+            <action id="CopyCat.ToggleLineCount"        class="com.internal.copycat.ToggleShowLineCountAction"/>
+            <action id="CopyCat.ToggleHidden"           class="com.internal.copycat.ToggleExcludeHiddenAction"/>
+            <action id="CopyCat.ToggleSelectedLines"    class="com.internal.copycat.ToggleCopySelectedLinesAction"/>
+            <action id="CopyCat.ToggleLargeFiles"       class="com.internal.copycat.ToggleExcludeLargeFilesAction"/>
+            <action id="CopyCat.ToggleExcludeTypes"     class="com.internal.copycat.ToggleExcludeFileTypesAction"/>
         </group>
     </actions>
 
